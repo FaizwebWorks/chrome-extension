@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "YouControl",
+  "version": "1.0",
+  "description": "Boost your coding productivity with YouControl! This innovative extension allows you to seamlessly manage your YouTube video playback as you code. Automatically pause videos when you switch tabs or applications, and resume instantly when you return. Stay focused on your development tasks without missing important content. Perfect for multitasking developers seeking an uninterrupted workflow! - Coding & Videos, Hand in Hand YouControl Makes Multitasking Grand!",
+  "permissions": ["tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
