@@ -8,21 +8,34 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (!video) return;
 
-  if (request.action === "pause") {
-    video.pause();
-  } else if (request.action === "play") {
-    video.play();
-  }
+  chrome.storage.sync.get("autoControlEnabled", (data) => {
+    const autoControlEnabled = data.autoControlEnabled ?? true;
+
+    // If autoControlEnabled is false, prevent playing/pausing
+    if (!autoControlEnabled) return;
+
+    // Perform the play/pause actions based on the request
+    if (request.action === "pause") {
+      video.pause();
+    } else if (request.action === "play") {
+      video.play();
+    }
+  });
 });
 
-// Listen for the visibility change event
+// Listen for visibility change to pause/play based on tab's visibility
 document.addEventListener("visibilitychange", () => {
   const video = document.querySelector("video");
-  if (video) {
+
+  chrome.storage.sync.get("autoControlEnabled", (data) => {
+    const autoControlEnabled = data.autoControlEnabled ?? true;
+
+    if (!autoControlEnabled || !video) return;
+
     if (document.visibilityState === "hidden") {
       video.pause();
     } else if (document.visibilityState === "visible") {
       video.play();
     }
-  }
+  });
 });
